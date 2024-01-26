@@ -19,23 +19,33 @@ namespace Guru99
         public void ValidLoginTest()
         {
             Login login = new Login(getDriver());
-            HomeObject home= login.validLogin("mngr549647","abYtanu");
-         
-            home.waitForNextPageDisplay();       
-           Assert.That("Guru99 Bank Manager HomePage", Is.EqualTo(home.getTitle()));
+            HomeObject home = login.validLogin("mngr549647", "abYtanu");
+
+            home.waitForNextPageDisplay();
+            Assert.That("Guru99 Bank Manager HomePage", Is.EqualTo(home.getTitle()));
         }
 
-        [Test]
-        public void InvalidLoginTest()
+
+        [Test,TestCaseSource("AddTestDataConfig")]
+         public void InvalidLoginTest( string username, string password)
         {
             Login login = new Login(getDriver());
-            login.validLogin("wrong", "wrong");
- 
-            IAlert alert = driver.SwitchTo().Alert();
+            login.validLogin(username, password);
 
-             
-            String alertText = alert.Text;
-            Assert.IsTrue(alertText.Contains("User or Password is not valid"));
+            IAlert alert = driver.SwitchTo().Alert();
+            String alertText = alert.Text;   
+            Assert.That("User or Password is not valid", Is.EqualTo(alertText));
+
+        }
+
+
+
+        public static IEnumerable <TestCaseData> AddTestDataConfig()
+        {
+       
+            yield return new  TestCaseData("invalid", "abYtanu");
+            yield return new  TestCaseData("mngr549647", "invalid");
+            yield return new TestCaseData("invalid", "invalid");
 
         }
 

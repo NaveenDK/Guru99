@@ -31,5 +31,10 @@ namespace Guru99.PageObjects
         {
             return driver.Title;
         }
+        public bool isLoginSuccessful()
+        {
+
+            return driver.Title.Equals("Guru99 Bank Manager HomePage", StringComparison.OrdinalIgnoreCase);
+        }
     }
 }
