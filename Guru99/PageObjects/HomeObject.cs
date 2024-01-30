@@ -20,6 +20,10 @@ namespace Guru99.PageObjects
             PageFactory.InitElements(driver, this);
         }
 
+        [FindsBy(How = How.XPath, Using = "//table/tbody/tr[3]/td")]
+        private IWebElement ManagerText;
+
+
         public void waitForNextPageDisplay()
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(8));
@@ -27,10 +31,18 @@ namespace Guru99.PageObjects
 
         }
 
+
+        public String getManagerId()
+        {
+            return ManagerText.Text;
+
+        }
         public String getTitle()
         {
             return driver.Title;
         }
+
+    
         public bool isLoginSuccessful()
         {
 

@@ -1,5 +1,7 @@
 ﻿using Guru99.PageObjects;
 using Guru99.Utilities;
+using NUnit.Allure.Attributes;
+using NUnit.Allure.Core;
 using NUnit.Framework.Interfaces;
 using OpenQA.Selenium;
 using System;
@@ -12,22 +14,35 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Guru99
 {
+
+    [AllureNUnit]
     public class E2ETest:Base
     {
 
-        [Test]
+        [Test(Description="Verify Valid login")]
+        [AllureStory("Login with valid password")]
+        [AllureStep("Login with valid Password")]
+        
         public void ValidLoginTest()
         {
+            String userID = "mngr549647";
             Login login = new Login(getDriver());
-            HomeObject home = login.validLogin("mngr549647", "abYtanu");
+            HomeObject home = login.validLogin(userID, "abYtanu");
 
-            home.waitForNextPageDisplay();
-            Assert.That("Guru99 Bank Manager HomePage", Is.EqualTo(home.getTitle()));
+            home.waitForNextPageDisplay();        
+             Screenshot screenshot = (driver as ITakesScreenshot).GetScreenshot();
+             screenshot.SaveAsFile(driver.Title + "_" + "Screenshot.png");
+             StringAssert.Contains(userID, home.getManagerId(),"ManagerID is not displayed");
+     
+
         }
 
 
-        [Test,TestCaseSource("AddTestDataConfig")]
-         public void InvalidLoginTest( string username, string password)
+        [Test(Description = "Verify Invalid login"), TestCaseSource("AddTestDataConfig")]
+        //[Test(Description = "Verify Valid login")]
+        [AllureStory("Login with Invalid password")]
+        [AllureStep("Login with Invalid Password")]
+        public void InvalidLoginTest( string username, string password)
         {
             Login login = new Login(getDriver());
             login.validLogin(username, password);
@@ -38,7 +53,7 @@ namespace Guru99
 
         }
 
-
+ 
 
         public static IEnumerable <TestCaseData> AddTestDataConfig()
         {
