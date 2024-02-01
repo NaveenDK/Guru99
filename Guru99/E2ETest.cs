@@ -16,6 +16,7 @@ namespace Guru99
 {
 
     [AllureNUnit]
+    [Parallelizable(ParallelScope.Children)]
     public class E2ETest:Base
     {
 
