@@ -22,17 +22,43 @@ namespace Guru99.Utilities
         [SetUp]
         public void StartBrowser()
         {
-           // String browserName = "Chrome";
+            // String browserName = "Chrome";
             String browserName = ConfigurationManager.AppSettings["browser"];
-           // Console.WriteLine(browserName);
+            String url = ConfigurationManager.AppSettings["Url"];
+            
+            // Console.WriteLine(browserName);
             InitBrowser(browserName);
 
             driver.Value.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
             driver.Value.Manage().Window.Maximize();
 
-            driver.Value.Url = "https://demo.guru99.com/v4/";
+            driver.Value.Url = url;
         }
+        //public void StartBrowser()
+        //{
+        //    try
+        //    {
+        //        string browserName = ConfigurationManager.AppSettings["browser"];
+        //        string url = ConfigurationManager.AppSettings["URL"];
 
+        //        if (string.IsNullOrEmpty(browserName) || string.IsNullOrEmpty(url))
+        //        {
+        //            throw new ConfigurationException("Browser or URL configuration is missing or invalid.");
+        //        }
+
+        //        InitBrowser(browserName);
+
+        //        driver.Value.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+        //        driver.Value.Manage().Window.Maximize();
+
+        //        driver.Value.Url = url;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle or log the exception appropriately
+        //        Console.WriteLine($"An error occurred: {ex.Message}");
+        //    }
+        //}
 
         public void InitBrowser(string browserName)
         {

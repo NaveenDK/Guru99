@@ -10,6 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Configurations\Environment.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Configurations\Environment.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DotNetSeleniumExtras.PageObjects" Version="3.11.0" />
     <PackageReference Include="DotNetSeleniumExtras.PageObjects.Core" Version="4.14.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
@@ -26,7 +36,7 @@
     <PackageReference Include="WebDriverManager" Version="2.17.1" />
   </ItemGroup>
  <ItemGroup>
-	 <None Update ="Utilities/testData.json">
+	 <None Update="Utilities/testData.json">
 		 <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	 </None>
  </ItemGroup>
@@ -35,6 +45,6 @@
     <Folder Include="Allure-Report\" />
   </ItemGroup>
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-		<Copy SourceFiles="App.config" DestinationFiles ="$(OutDir)\testhost.dll.config"/>
+		<Copy SourceFiles="App.config" DestinationFiles="$(OutDir)\testhost.dll.config" />
 	</Target>
 </Project>
