@@ -2,30 +2,35 @@
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
+using Guru99.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebDriverManager.DriverConfigs.Impl;
+using System.Threading;
 
 namespace Guru99.Utilities
 {
     public class Base
     {
-        public IWebDriver driver;
+      //  public IWebDriver driver;
+        public  ThreadLocal <IWebDriver> driver = new ThreadLocal<IWebDriver>(); 
 
         [SetUp]
         public void StartBrowser()
         {
-            String browserName = "Chrome";
-
+           // String browserName = "Chrome";
+            String browserName = ConfigurationManager.AppSettings["browser"];
+           // Console.WriteLine(browserName);
             InitBrowser(browserName);
 
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
-            driver.Manage().Window.Maximize();
+            driver.Value.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
+            driver.Value.Manage().Window.Maximize();
 
-            driver.Url = "https://demo.guru99.com/v4/";
+            driver.Value.Url = "https://demo.guru99.com/v4/";
         }
 
 
@@ -35,14 +40,14 @@ namespace Guru99.Utilities
             {
                 case "Firefox":
                     new WebDriverManager.DriverManager().SetUpDriver(new FirefoxConfig());
-                    driver = new FirefoxDriver();
+                    driver.Value = new FirefoxDriver();
                     break;
                 case "Chrome":
                     new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig());
-                    driver = new ChromeDriver();
+                    driver.Value = new ChromeDriver();
                     break;
                 case "Edge":
-                    driver = new EdgeDriver();
+                    driver.Value = new EdgeDriver();
                     break;
 
             }
@@ -50,13 +55,18 @@ namespace Guru99.Utilities
 
         public IWebDriver getDriver()
         {
-            return driver;
+            return driver.Value;
+        }
+
+        public static JsonReader getDataParser()
+        {
+            return new JsonReader();
         }
 
         [TearDown]
         public void AfterTest()
         {
-            driver.Quit();
+            driver.Value.Quit();
         }
     }
 }

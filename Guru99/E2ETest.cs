@@ -19,6 +19,7 @@ namespace Guru99
     public class E2ETest:Base
     {
 
+
         [Test(Description="Verify Valid login")]
         [AllureStory("Login with valid password")]
         [AllureStep("Login with valid Password")]
@@ -30,13 +31,13 @@ namespace Guru99
             HomeObject home = login.validLogin(userID, "abYtanu");
 
             home.waitForNextPageDisplay();        
-             Screenshot screenshot = (driver as ITakesScreenshot).GetScreenshot();
-             screenshot.SaveAsFile(driver.Title + "_" + "Screenshot.png");
+             Screenshot screenshot = (driver.Value as ITakesScreenshot).GetScreenshot();
+             screenshot.SaveAsFile(driver.Value.Title + "_" + "Screenshot.png");
              StringAssert.Contains(userID, home.getManagerId(),"ManagerID is not displayed");
      
 
         }
-
+        [Parallelizable(ParallelScope.All)]
 
         [Test(Description = "Verify Invalid login"), TestCaseSource("AddTestDataConfig")]
         //[Test(Description = "Verify Valid login")]
@@ -47,7 +48,7 @@ namespace Guru99
             Login login = new Login(getDriver());
             login.validLogin(username, password);
 
-            IAlert alert = driver.SwitchTo().Alert();
+            IAlert alert = driver.Value.SwitchTo().Alert();
             String alertText = alert.Text;   
             Assert.That("User or Password is not valid", Is.EqualTo(alertText));
 
@@ -58,9 +59,9 @@ namespace Guru99
         public static IEnumerable <TestCaseData> AddTestDataConfig()
         {
        
-            yield return new  TestCaseData("invalid", "abYtanu");
-            yield return new  TestCaseData("mngr549647", "invalid");
-            yield return new TestCaseData("invalid", "invalid");
+            yield return new  TestCaseData(getDataParser().extractData("username_wrong"), getDataParser().extractData("password_wrong"));;
+            yield return new  TestCaseData(getDataParser().extractData("username"), getDataParser().extractData("password_wrong"));
+            yield return new TestCaseData(getDataParser().extractData("username_wrong"), getDataParser().extractData("password"));
 
         }
 
